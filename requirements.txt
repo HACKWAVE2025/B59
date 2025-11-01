@@ -1,0 +1,71 @@
+# Core
+requests==2.32.3
+numpy==1.26.4
+pandas==2.2.3
+tqdm==4.67.1
+Pillow==10.2.0
+gdown==5.2.0
+
+# Flask & web
+Flask==3.1.0
+flask-cors==4.0.0
+Flask-SocketIO==5.3.6
+eventlet==0.33.3
+gunicorn==22.0.0
+Werkzeug>=3.1.0
+
+itsdangerous==2.2.0
+Jinja2==3.1.4
+
+# Deep learning (for M1–M4)
+tensorflow-macos==2.16.2
+tensorflow-metal==1.2.0
+keras==3.4.1
+torch==2.2.0
+torchvision==0.17.0
+torchaudio==2.2.0
+deepface==0.0.92
+facenet-pytorch==2.6.0
+retina-face==0.0.17
+mtcnn==1.0.0
+
+# Computer Vision
+opencv-python==4.9.0.80
+opencv-contrib-python==4.9.0.80
+mediapipe==0.10.21
+ultralytics==8.3.221
+ultralytics-thop==2.0.17
+moviepy==1.0.3
+imageio==2.37.0
+imageio-ffmpeg==0.6.0
+
+# Audio / signal
+librosa==0.10.2.post1
+sounddevice==0.5.3
+soundfile==0.13.1
+soxr==1.0.0
+audioread==3.0.1
+
+# ML utils
+scikit-learn==1.5.2
+scipy==1.12.0
+sympy==1.12
+numba==0.59.1
+llvmlite==0.42.0
+
+# Visualization
+matplotlib==3.9.2
+contourpy==1.2.0
+cycler==0.12.1
+kiwisolver==1.4.5
+fonttools==4.53.1
+
+# Misc
+nltk==3.9.1
+textblob==0.17.1
+regex==2024.5.15
+beautifulsoup4==4.12.3
+python-dotenv==1.0.1
+absl-py==2.1.0
+typing_extensions==4.12.2
+packaging==24.1
