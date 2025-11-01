@@ -62,6 +62,7 @@ Transparent and explainable AI outputs.
 Focus on fairness and unbiased evaluation.
 ## Future Enhancements
 Integration with Zoom/Google Meet interview APIs.
+<br>
 Improved audio deepfake classifier.
 Recruiter bias visualization dashboard.
 Multilingual emotion recognition.
