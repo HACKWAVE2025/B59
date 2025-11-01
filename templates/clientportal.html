@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Client Portal - Host Meeting</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css files/profile.css') }}">
+
+<style>
+* { margin:0; padding:0; box-sizing:border-box; font-family:"Poppins",sans-serif; }
+body { background:#fff; color:#333; transition:0.3s; }
+body.dark-mode { background: linear-gradient(135deg,#000,#1a1a1a,#2c2c2c); color:#f1f1f1; }
+
+.navbar { display:flex; justify-content:space-between; align-items:center; padding:1rem 3rem; background: rgba(0,0,0,0.2); backdrop-filter: blur(10px); position:sticky; top:0; z-index:100; }
+body.dark-mode .navbar { background-color:#222; }
+.logo { font-size:1.8rem; font-weight:700; background: linear-gradient(90deg,#1db1bc,#3e46b0); -webkit-background-clip:text; background-clip:text; color:transparent; }
+.nav-links { display:flex; gap:1rem; }
+.nav-links button { border:none; padding:0.6rem 1.2rem; border-radius:25px; font-weight:600; cursor:pointer; background: linear-gradient(90deg,#36d1dc,#5b86e5); color:#fff; transition:0.3s; }
+.nav-links button:hover { transform: scale(1.05); }
+
+.container { display:flex; flex-direction:column; align-items:center; padding:5rem 2rem; text-align:center; transition:0.8s; opacity:0; transform:translateY(30px); }
+.container.show { opacity:1; transform:translateY(0); }
+
+h1 { font-size:2.5rem; color:#36d1dc; margin-bottom:1rem; }
+p.description { color:#666; margin-bottom:2rem; max-width:500px; }
+
+.host-btn, .start-btn { margin:0.8rem; padding:1rem 2rem; font-size:1rem; border:none; border-radius:30px; font-weight:600; cursor:pointer; color:#fff; transition:0.3s; }
+.host-btn { background: linear-gradient(135deg,#e1ff37,#e0d231); }
+.host-btn:hover { transform: translateY(-4px); box-shadow:0 0 15px rgba(0,255,0,0.4); }
+.start-btn { background: linear-gradient(135deg,#4285f4,#0b63e0); }
+.start-btn:hover { transform: translateY(-4px); box-shadow:0 0 15px rgba(66,133,244,0.4); }
+
+
+
+.meeting-info {
+  background: rgba(255, 255, 255, 0.07);
+  padding: 30px 25px;
+  border-radius: 20px;
+  text-align: left;
+  width: 360px;
+  max-width: 90%;
+  display: none;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.25);
+  transition: all 0.3s ease;
+  margin-top: 2rem;
+}
+body.dark-mode .meeting-info {
+  background: rgba(255, 255, 255, 0.1);
+  box-shadow: 0 0 20px rgba(255, 255, 255, 0.05);
+}
+.meeting-info h2 {
+  text-align: center;
+  color: #36d1dc;
+  margin-bottom: 20px;
+  font-size: 1.4rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+  padding-bottom: 10px;
+}
+.meeting-info p {
+  margin: 12px 0;
+  font-size: 1rem;
+  color: inherit;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+}
+.meeting-info strong {
+  color: #36d1dc;
+  min-width: 120px;
+}
+.meeting-info span {
+  flex: 1;
+  text-align: right;
+  font-weight: 500;
+  color: #555;
+  word-break: break-all;
+}
+body.dark-mode .meeting-info span {
+  color: #f1f1f1;
+}
+.meeting-info input {
+  flex: 1;
+  padding: 8px 10px;
+  border-radius: 8px;
+  border: none;
+  font-size: 0.95rem;
+  background: rgba(255, 255, 255, 0.15);
+  color: #000;
+  min-width: 0;
+}
+body.dark-mode .meeting-info input {
+  background: rgba(255, 255, 255, 0.2);
+  color: #fff;
+}
+.copy-btn {
+  padding: 6px 12px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  background: linear-gradient(90deg, #36d1dc, #5b86e5);
+  color: #fff;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+.copy-btn:hover {
+  transform: scale(1.05);
+  opacity: 0.9;
+}
+.start-btn {
+  display: block;
+  width: 100%;
+  margin-top: 25px;
+  padding: 0.9rem;
+  border-radius: 10px;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+
+
+
+
+@media(max-width:500px){ .meeting-info { width:90%; } }
+</style>
+</head>
+<body>
+
+<header class="navbar">
+  <div class="logo">AuthentiHire</div>
+  <div class="nav-links">
+    <button onclick="window.location.href='/'">Home</button>
+    <!-- Profile Dropdown --> 
+    <div class="dropdown">
+      <button class="dropbtn">Profile ▾</button>
+      <div class="dropdown-content">
+        <a href="{{ url_for('profile') }}">View Profile</a>
+<a href="{{ url_for('edit_profile') }}">Edit Profile</a>
+<a href="{{ url_for('candidate_logout') }}">Logout</a>
+
+      </div>
+    </div>  
+    <button class="toggle-btn" id="toggleBtn">🌙 Dark Mode</button>
+  </div>
+</header>
+
+<div class="container" id="hostContainer">
+  <h1>Host Your Meeting</h1>
+  <p class="description">Create a unique Meeting ID and Password for participants to join.</p>
+
+  <button class="host-btn" onclick="createMeeting()">Create Meeting</button>
+
+  <div class="meeting-info" id="meetingInfo">
+    <h2>Meeting Details</h2>
+    <p><strong>Meeting ID:</strong> <span id="meetingID"></span> <button class="copy-btn" onclick="copyText('meetingID')">⧉</button></p>
+    <p><strong>Password:</strong> <span id="meetingPassword"></span> <button class="copy-btn" onclick="copyText('meetingPassword')">⧉</button></p>
+    <p><strong>Custom Password:</strong> <input type="text" id="customPassword" placeholder="Alphanumeric only">
+    <button class="copy-btn" onclick="setCustomPassword()">Set</button></p>
+    <button class="start-btn" onclick="startMeeting()">Start Meeting</button>
+  </div>
+</div>
+
+<script>
+// ===== Dark Mode Toggle =====
+const toggleBtn=document.getElementById('toggleBtn');
+toggleBtn.addEventListener('click',()=>{
+  document.body.classList.toggle('dark-mode');
+  toggleBtn.textContent = document.body.classList.contains('dark-mode') ? '☀ Light Mode' : '🌙 Dark Mode';
+  localStorage.setItem('theme', document.body.classList.contains('dark-mode')?'dark':'light');
+});
+window.onload=()=>{
+  if(localStorage.getItem('theme')==='dark'){ document.body.classList.add('dark-mode'); toggleBtn.textContent='☀ Light Mode'; }
+  setTimeout(()=>document.getElementById('hostContainer').classList.add('show'),100);
+};
+
+// ===== Meeting Functions =====
+function createMeeting(){
+  const meetingID = Math.floor(100000000 + Math.random()*900000000);
+  const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  let password='';
+  for(let i=0;i<6;i++){ password+=chars.charAt(Math.floor(Math.random()*chars.length)); }
+  document.getElementById('meetingID').textContent=meetingID;
+  document.getElementById('meetingPassword').textContent=password;
+  document.getElementById('meetingInfo').style.display='block';
+  document.getElementById('customPassword').value='';
+}
+
+function copyText(id){ navigator.clipboard.writeText(document.getElementById(id).textContent); alert(id==='meetingID'?'Meeting ID copied!':'Password copied!'); }
+
+function setCustomPassword(){ 
+  const custom=document.getElementById('customPassword').value.trim();
+  if(!custom){ alert('Enter a valid password!'); return; }
+  document.getElementById('meetingPassword').textContent=custom;
+  alert('Custom password set!');
+}
+
+function startMeeting(){
+  const meetingID = document.getElementById('meetingID').textContent;
+  const password = document.getElementById('meetingPassword').textContent;
+
+  // Save meeting info to backend
+  fetch("/create-meeting", {
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      body: JSON.stringify({id: meetingID, password})
+  })
+  .then(res => res.json())
+  .then(data => {
+      if(data.success){
+          // Redirect host to meeting page with role=host
+          window.location.href = `/meeting/${meetingID}?role=host`;
+      }
+  });
+}
+
+</script>
+</body>
+</html>

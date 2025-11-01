@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>About Us - AuthentiHire</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css files/style1.css')}}">
+
+  <style>
+    :root {
+      --bg-color: #0b0c10;
+      --card-color: rgba(255, 255, 255, 0.05);
+      --highlight: #ffd500;
+      --text-color: #eaeaea;
+      --accent-color: #00d4ff;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: "Poppins", sans-serif;
+    }
+
+    body {
+      background: linear-gradient(135deg, #0b0c10, #1f2833);
+      color: var(--text-color);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding-bottom: 100px;
+      overflow-x: hidden;
+    }
+
+    /* Navbar */
+    .navbar {
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(0, 0, 0, 0.7);
+      backdrop-filter: blur(10px);
+      padding: 15px 50px;
+      position: fixed;
+      top: 0;
+      z-index: 10;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .logo {
+      font-size: 1.8em;
+      font-weight: 700;
+      background: linear-gradient(90deg, #1db1bc, #3e46b0);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      letter-spacing: 1px;
+    }
+
+    .nav-links {
+      list-style: none;
+      display: flex;
+      gap: 25px;
+    }
+
+    .nav-links a {
+      text-decoration: none;
+      color: var(--text-color);
+      font-weight: 500;
+      position: relative;
+      transition: color 0.3s;
+    }
+
+    .nav-links a::after {
+      content: "";
+      position: absolute;
+      width: 0%;
+      height: 2px;
+      bottom: -3px;
+      left: 0;
+      background: var(--highlight);
+      transition: width 0.3s;
+    }
+
+    .nav-links a:hover {
+      color: var(--highlight);
+    }
+
+    .nav-links a:hover::after {
+      width: 100%;
+    }
+
+    /* About Section */
+    .about-section {
+      margin-top: 120px;
+      max-width: 800px;
+      width: 90%;
+      background: var(--card-color);
+      backdrop-filter: blur(20px);
+      padding: 40px;
+      border-radius: 20px;
+      box-shadow: 0 0 20px rgba(255, 213, 0, 0.1);
+      animation: fadeInUp 1s ease;
+      text-align: center;
+    }
+
+    .about-section h2 {
+      font-size: 2em;
+      color: var(--highlight);
+      text-shadow: 0 0 10px var(--highlight);
+      margin-bottom: 15px;
+    }
+
+    .about-section p {
+      font-size: 1.1em;
+      color: #cfcfcf;
+      line-height: 1.6;
+      margin-bottom: 10px;
+    }
+
+    /* Features Section */
+    .features-section {
+      margin-top: 70px;
+      width: 90%;
+      max-width: 1100px;
+      text-align: center;
+    }
+
+    .features-section h2 {
+      color: var(--highlight);
+      font-size: 2em;
+      margin-bottom: 20px;
+      text-shadow: 0 0 8px var(--highlight);
+    }
+
+    .features-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 25px;
+      margin-top: 20px;
+    }
+
+    .feature-card {
+      background: var(--card-color);
+      padding: 25px;
+      border-radius: 15px;
+      box-shadow: 0 0 15px rgba(0, 212, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      opacity: 0;
+      transform: translateY(40px);
+      transition: all 0.8s ease;
+    }
+
+    .feature-card.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .feature-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 0 20px rgba(0, 212, 255, 0.3);
+    }
+
+    .feature-card h3 {
+      color: var(--accent-color);
+      margin-bottom: 10px;
+    }
+
+    .feature-card p {
+      color: #cfcfcf;
+      font-size: 0.95em;
+      line-height: 1.5;
+    }
+
+    /* Animation */
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+  </style>
+</head>
+<body>
+  <!-- Navbar -->
+  <header class="navbar">
+    <div class="logo">AuthentiHire</div>
+    <ul class="nav-links">
+      <li><a href="/">Home</a></li>
+      <li><a href="/about" class="active">About</a></li>
+      <li><a href="/contact">Contact</a></li>
+    </ul>
+  </header>
+
+  <!-- About Section -->
+  <section class="about-section">
+    <h2>About AuthentiHire</h2>
+    <p>
+      AuthentiHire is an AI-powered recruitment platform dedicated to ensuring fairness,
+      transparency, and authenticity in digital hiring. Our system intelligently detects
+      deepfakes, impersonation, and unethical behavior during video interviews.
+    </p>
+    <p>
+      We combine advanced machine learning, facial recognition, and behavioral analytics
+      to make hiring decisions more reliable and free from fraud.
+    </p>
+  </section>
+
+  <!-- Features Section -->
+  <section class="features-section">
+    <h2>Key Features & Benefits</h2>
+    <div class="features-container">
+      <div class="feature-card">
+        <h3>🎭 Deepfake Detection</h3>
+        <p>Instantly identifies AI-generated or tampered videos to ensure authenticity.</p>
+      </div>
+      <div class="feature-card">
+        <h3>👀 Gaze Tracking</h3>
+        <p>Monitors eye movements for focus and attention analysis during interviews.</p>
+      </div>
+      <div class="feature-card">
+        <h3>🧑‍🤝‍🧑 Multi-Person Detection</h3>
+        <p>Detects multiple participants to maintain integrity in remote assessments.</p>
+      </div>
+      <div class="feature-card">
+        <h3>🔒 Liveness Verification</h3>
+        <p>Confirms a candidate’s real-time presence using face motion and depth cues.</p>
+      </div>
+      <div class="feature-card">
+        <h3>🧠 AI-Driven Insights</h3>
+        <p>Provides analytics on candidate behavior, confidence, and engagement.</p>
+      </div>
+      <div class="feature-card">
+        <h3>⚖️ Fair & Unbiased Hiring</h3>
+        <p>Reduces unconscious bias by analyzing data objectively and ethically.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- JS for Animation -->
+  <script>
+    const cards = document.querySelectorAll('.feature-card');
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach((entry, index) => {
+        if (entry.isIntersecting) {
+          setTimeout(() => {
+            entry.target.classList.add('show');
+          }, index * 200); // delay for staggered animation
+        }
+      });
+    }, { threshold: 0.2 });
+
+    cards.forEach(card => observer.observe(card));
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AuthentiHire</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css files/style1.css')}}">
+  
+</head>
+<body>
+  <!-- Navbar -->
+  <header class="navbar">
+    <div class="logo">AuthentiHire</div>
+    <ul class="nav-links">
+      <li><a href="/">Home</a></li>
+      <li><a href="/about">About</a></li>
+      <li><a href="/contact">Contact</a></li>
+    </ul>
+    <button class="toggle-btn" onclick="toggleMode()" aria-label="Toggle Dark Mode">🌙 Dark Mode</button>
+  </header>
+  <!-- Login / Role Selection Section -->
+  <!-- Login / Role Selection Section -->
+<section class="login-section">
+  <canvas id="login-canvas"></canvas>
+  
+  <h2>Welcome to AuthentiHire</h2>
+  <p>Select your role to continue:</p>
+  <div class="login-buttons">
+    <button onclick="window.location.href='/clientsignup'">Client Portal</button>
+    <button onclick="window.location.href='/candidatesignup'">Candidate Portal</button>
+  </div>
+</section>
+<!-- Features Section -->
+<section id="features">
+  <h2>Features</h2>
+  <p>AuthentiHire uses advanced AI to verify identities, ensure fairness, and prevent fraud.</p>
+  <div class="feature-cards">
+    <div class="card deepfake">
+      <div class="card-shine"></div>
+      <div class="card-icon">🎭</div>
+      <h3>Deepfake Detection</h3>
+      <p>Detect AI-generated or altered video/audio in real time with advanced neural networks.</p>
+    </div>
+    <div class="card gaze">
+      <div class="card-shine"></div>
+      <div class="card-icon">👀</div>
+      <h3>Gaze Detection</h3>
+      <p>Track candidate's eye movement to detect focus or distractions during interviews.</p>
+    </div>
+    <div class="card multiperson">
+      <div class="card-shine"></div>
+      <div class="card-icon">🧑‍🤝‍🧑</div>
+      <h3>Multi-Person Detection</h3>
+      <p>Automatically flag when more than one person is detected in the frame.</p>
+    </div>
+    <div class="card liveness">
+      <div class="card-shine"></div>
+      <div class="card-icon">🔒</div>
+      <h3>Liveness Check</h3>
+      <p>Confirm a candidate is physically present and not spoofing the system.</p>
+    </div>
+    <div class="card analytics">
+      <div class="card-shine"></div>
+      <div class="card-icon">🧠</div>
+      <h3>AI Interview Analytics</h3>
+      <p>Analyze speech patterns, tone, and sentiment during live interviews.</p>
+    </div>
+    <div class="card bias">
+      <div class="card-shine"></div>
+      <div class="card-icon">🚀</div>
+      <h3>Bias Mitigation</h3>
+      <p>Ensure hiring fairness by detecting and reducing unconscious bias.</p>
+    </div>
+  </div>
+</section>
+
+  <!-- Review Section -->
+  <section class="review-section">
+    <h2>Leave a Review</h2>
+    <p>Help us improve:</p>
+    <form class="review-form">
+      <input type="text" id="name" placeholder="Your Name" required>
+      <input type="email" id="email" placeholder="Your Email" required>
+      <textarea id="review" placeholder="Write your review..." required></textarea>
+      <label>Your Rating:</label>
+      <div class="rating" id="rating">
+        <span data-value="1">☆</span>
+        <span data-value="2">☆</span>
+        <span data-value="3">☆</span>
+        <span data-value="4">☆</span>
+        <span data-value="5">☆</span>
+      </div>
+      <button type="submit">Submit Review</button>
+    </form>
+    <div class="reviews-container" id="reviews-container"></div>
+  </section>
+
+  <!-- Scripts -->
+  <script>
+    function toggleMode() {
+      document.body.classList.toggle("dark-mode");
+      const btn = document.querySelector(".toggle-btn");
+      if (document.body.classList.contains("dark-mode")) {
+        btn.textContent = "☀ Light Mode";
+        localStorage.setItem("theme", "dark");
+      } else {
+        btn.textContent = "🌙 Dark Mode";
+        localStorage.setItem("theme", "light");
+      }
+    }
+
+    window.onload = () => {
+      if (localStorage.getItem("theme") === "dark") {
+        document.body.classList.add("dark-mode");
+        document.querySelector(".toggle-btn").textContent = "☀ Light Mode";
+      }
+    };
+
+    // Review Star Rating  
+    const stars = document.querySelectorAll('.rating span');
+    let selectedRating = 0;
+
+    stars.forEach((star, idx) => {
+      star.addEventListener('mouseover', () => {
+        stars.forEach((s,i)=> s.textContent = i<=idx ? '★':'☆');
+      });
+      star.addEventListener('mouseout', () => {
+        stars.forEach((s,i)=> s.textContent = i<selectedRating ? '★':'☆');
+      });
+      star.addEventListener('click', () => {
+        selectedRating = idx+1;
+        stars.forEach((s,i)=> s.textContent = i<selectedRating ? '★':'☆');
+      });
+    });
+
+    // Handle review submission
+    const reviewForm = document.querySelector(".review-form");
+    const reviewsContainer = document.getElementById("reviews-container");
+    reviewForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const name = document.getElementById("name").value;
+      const email = document.getElementById("email").value;
+      const reviewText = document.getElementById("review").value;
+      if (!selectedRating) {
+        alert("Please select a rating!");
+        return;
+      }
+      const reviewCard = document.createElement("div");
+      reviewCard.classList.add("review-card");
+      reviewCard.innerHTML = `<h4>${name} (${email})</h4><p>${reviewText}</p><p>⭐ ${selectedRating}/5</p>`;
+      reviewsContainer.appendChild(reviewCard);
+      reviewForm.reset();
+      selectedRating = 0;
+      stars.forEach(s => s.textContent = "☆");
+    });
+    
+  // Scroll animation
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('show');
+      }
+    });
+  }, { threshold: 0.2 });
+
+  document.querySelectorAll('.login-section, #features, .review-section, .card, .login-buttons button')
+    .forEach(el => observer.observe(el));
+
+  // Navbar scroll shrink & glow effect
+  const navbar = document.querySelector(".navbar");
+  window.addEventListener("scroll", () => {
+    if (window.scrollY > 60) {
+      navbar.classList.add("scrolled");
+    } else {
+      navbar.classList.remove("scrolled");
+    }
+  });
+  function toggleMode() {
+  document.body.classList.toggle("dark-mode");
+  localStorage.setItem("theme", document.body.classList.contains("dark-mode") ? "dark" : "light");
+}
+// Background Animation for Login Section
+const canvas = document.getElementById('login-canvas');
+const ctx = canvas.getContext('2d');
+
+function resizeCanvas() {
+  canvas.width = canvas.parentElement.offsetWidth;
+  canvas.height = canvas.parentElement.offsetHeight;
+}
+resizeCanvas();
+window.addEventListener('resize', resizeCanvas);
+
+class Particle {
+  constructor() {
+    this.x = Math.random() * canvas.width;
+    this.y = Math.random() * canvas.height;
+    this.size = Math.random() * 2.5 + 0.8;
+    this.speedX = Math.random() * 0.4 - 0.2;
+    this.speedY = Math.random() * 0.4 - 0.2;
+    this.opacity = Math.random() * 0.4 + 0.2;
+  }
+
+  update() {
+    this.x += this.speedX;
+    this.y += this.speedY;
+    if (this.x > canvas.width) this.x = 0;
+    if (this.x < 0) this.x = canvas.width;
+    if (this.y > canvas.height) this.y = 0;
+    if (this.y < 0) this.y = canvas.height;
+  }
+
+  draw() {
+    ctx.fillStyle = `rgba(59, 130, 246, ${this.opacity})`;
+    ctx.beginPath();
+    ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+    ctx.fill();
+    
+    const gradient = ctx.createRadialGradient(this.x, this.y, 0, this.x, this.y, this.size * 2.5);
+    gradient.addColorStop(0, `rgba(96, 165, 250, ${this.opacity * 0.3})`);
+    gradient.addColorStop(1, 'rgba(96, 165, 250, 0)');
+    ctx.fillStyle = gradient;
+    ctx.beginPath();
+    ctx.arc(this.x, this.y, this.size * 2.5, 0, Math.PI * 2);
+    ctx.fill();
+  }
+}
+
+class FloatingOrb {
+  constructor() {
+    this.x = Math.random() * canvas.width;
+    this.y = Math.random() * canvas.height;
+    this.size = Math.random() * 50 + 30;
+    this.speedX = Math.random() * 0.25 - 0.125;
+    this.speedY = Math.random() * 0.25 - 0.125;
+  }
+
+  update() {
+    this.x += this.speedX;
+    this.y += this.speedY;
+    if (this.x > canvas.width + this.size) this.x = -this.size;
+    if (this.x < -this.size) this.x = canvas.width + this.size;
+    if (this.y > canvas.height + this.size) this.y = -this.size;
+    if (this.y < -this.size) this.y = canvas.height + this.size;
+  }
+
+  draw() {
+    const gradient = ctx.createRadialGradient(this.x, this.y, 0, this.x, this.y, this.size);
+    gradient.addColorStop(0, 'rgba(59, 130, 246, 0.08)');
+    gradient.addColorStop(0.5, 'rgba(96, 165, 250, 0.04)');
+    gradient.addColorStop(1, 'transparent');
+    ctx.fillStyle = gradient;
+    ctx.beginPath();
+    ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+    ctx.fill();
+  }
+}
+
+const particles = [];
+for (let i = 0; i < 60; i++) {
+  particles.push(new Particle());
+}
+
+const orbs = [];
+for (let i = 0; i < 4; i++) {
+  orbs.push(new FloatingOrb());
+}
+
+function animate() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  
+  orbs.forEach(orb => {
+    orb.update();
+    orb.draw();
+  });
+  
+  particles.forEach(particle => {
+    particle.update();
+    particle.draw();
+  });
+  
+  for (let i = 0; i < particles.length; i++) {
+    for (let j = i + 1; j < particles.length; j++) {
+      const dx = particles[i].x - particles[j].x;
+      const dy = particles[i].y - particles[j].y;
+      const distance = Math.sqrt(dx * dx + dy * dy);
+      
+      if (distance < 100) {
+        ctx.strokeStyle = `rgba(59, 130, 246, ${0.12 * (1 - distance / 100)})`;
+        ctx.lineWidth = 0.5;
+        ctx.beginPath();
+        ctx.moveTo(particles[i].x, particles[i].y);
+        ctx.lineTo(particles[j].x, particles[j].y);
+        ctx.stroke();
+      }
+    }
+  }
+  
+  requestAnimationFrame(animate);
+}
+
+animate();
+
+
+
+  </script>
+</body>
+</html>

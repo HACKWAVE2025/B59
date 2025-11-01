@@ -1,0 +1,675 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Meeting - AuthentiHire</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"/>
+
+<style>
+body {
+    font-family: "Poppins", sans-serif;
+    margin: 0;
+    padding: 0;
+    background: linear-gradient(135deg, #0b0c10, #1f2833);
+    color: #fff;
+    overflow: hidden;
+}
+header .meeting-id {
+    font-weight: 600;
+    font-size: 1.1rem;
+    background: linear-gradient(90deg, #1db1bc, #3e46b0);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    text-shadow: none;
+}
+#inviteBtn {
+    background: linear-gradient(90deg, #1db1bc, #3e46b0);
+    border: none;
+    padding: 6px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 600;
+    color: #0b0c10;
+    transition: 0.3s;
+}
+#inviteBtn:hover {
+    filter: brightness(1.1);
+}
+nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.8rem 1.5rem;
+    background: rgba(11, 12, 16, 0.9);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid #45a29e;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+nav .logo {
+  font-size: 1.8em;
+  font-weight: 700;
+  background: linear-gradient(90deg, #1db1bc, #3e46b0);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  letter-spacing: 1px;
+  text-shadow: none;
+}
+.nav-links-container {
+    display: flex;
+    gap: 1.5rem;
+    align-items: center;
+}
+.nav-links-container a {
+    color: #b5b7eca7;
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.3s;
+    padding: 6px 10px;
+    border-radius: 6px;
+}
+.nav-links-container a:hover {
+    color: #ffffff;
+    background: rgba(102, 252, 241, 0.2);
+}
+header {
+    height: 25px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 1rem;
+    background: rgba(17, 17, 17, 0.8);
+    border-bottom: 1px solid #45a29e;
+    font-size: 1.1rem;
+    font-weight: 500;
+    color: #66fcf1;
+}
+#meetingContainer {
+    display: flex;
+    height: calc(100vh - 100px);
+    width: 100%;
+}
+#videos {
+    flex: 3;
+    display: grid;
+    gap: 0.7rem;
+    padding: 0.7rem;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    grid-auto-rows: minmax(150px, auto);
+}
+.videoContainer {
+    position: relative;
+    border-radius: 12px;
+    overflow: hidden;
+    border: 2px solid transparent;
+    transition: border 0.3s, transform 0.3s;
+    background: #0b0c10;
+}
+.videoLabel {
+    position: absolute;
+    bottom: 5px;
+    left: 5px;
+    background: rgba(0,0,0,0.6);
+    color: #fff;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 0.9rem;
+    z-index: 10;
+    transition: background 0.3s;
+}
+video {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    background: #000;
+    border-radius: 10px;
+}
+#localContainer {
+    position: absolute;
+    bottom: 25px;
+    right: 25px;
+    width: 200px;
+    height: 160px;
+    border-radius: 10px;
+    background: linear-gradient(90deg, #1db1bc, #3e46b0);
+    padding: 3px;
+    cursor: move;
+    z-index: 20;
+}
+#localContainer video {
+    width: 100%;
+    height: 100%;
+    border-radius: 8px;
+    object-fit: cover;
+    background: #000;
+    cursor:move;
+}
+#sidebar {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    background: rgba(11, 12, 16, 0.85);
+    border-left: 1px solid #45a29e;
+    min-height: 0;
+}
+#tabs {
+    display: flex;
+    justify-content: space-around;
+    background: #0b0c10;
+    padding: 0.4rem 0;
+}
+.tabBtn {
+    flex: 1;
+    border: none;
+    background: transparent;
+    color: #c5c6c7;
+    cursor: pointer;
+    padding: 0.5rem;
+    font-weight: 500;
+    transition: background 0.3s, color 0.3s;
+}
+.tabBtn.active {
+    background: linear-gradient(90deg, #1db1bc, #3e46b0);
+    color: #0b0c10;
+    border-radius: 6px;
+}
+.tabContent {
+    flex: 1;
+    display: none;
+    flex-direction: column;
+    padding: 0.7rem;
+    overflow-y: auto;
+    min-height:0;
+}
+.tabContent.active {
+    display: flex;
+}
+#chatInput {
+    flex: 1;
+    padding: 0.6rem;
+    border-radius: 6px;
+    border: none;
+    margin-right: 0.5rem;
+    outline: none;
+}
+#sendBtn {
+    padding: 0.6rem 1rem;
+    border-radius: 6px;
+    border: none;
+    background: #45a29e;
+    color: #0b0c10;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.3s;
+}
+#controls {
+    flex-shrink: 0;
+    display: flex;
+    justify-content: center;
+    padding: 0.5rem;
+    background: rgba(17, 17, 17, 0.8);
+    border-top: 1px solid #45a29e;
+}
+#controls button {
+    background: #1f2833;
+    border: none;
+    color: #c5c6c7;
+    margin: 0 0.3rem;
+    padding: 0.6rem 1rem;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: 0.3s;
+}
+#controls button:hover {
+    background: #45a29e;
+    color: #0b0c10;
+}
+#overlay {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(0,0,0,0.7);
+    color: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    font-size: 1.3rem;
+    padding: 20px;
+    z-index: 100;
+    display: none;
+}
+#debugStatus {
+    position: fixed;
+    top: 60px;
+    right: 10px;
+    background: rgba(0,0,0,0.8);
+    color: lime;
+    padding: 10px;
+    border-radius: 5px;
+    font-family: monospace;
+    font-size: 12px;
+    z-index: 9999;
+}
+
+/* ===== NEW: AI Detection Pop-up Styles ===== */
+.ai-notification {
+    position: fixed;
+    top: 80px;
+    right: 20px;
+    background: linear-gradient(135deg, #1db1bc, #3e46b0);
+    color: white;
+    padding: 15px 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+    z-index: 10000;
+    min-width: 300px;
+    animation: slideIn 0.3s ease-out, slideOut 0.3s ease-in 4.7s;
+    opacity: 1;
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateX(400px);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes slideOut {
+    from {
+        transform: translateX(0);
+        opacity: 1;
+    }
+    to {
+        transform: translateX(400px);
+        opacity: 0;
+    }
+}
+
+.ai-notification.success {
+    background: linear-gradient(135deg, #00b894, #00cec9);
+}
+
+.ai-notification.warning {
+    background: linear-gradient(135deg, #fdcb6e, #e17055);
+}
+
+.ai-notification.error {
+    background: linear-gradient(135deg, #d63031, #e74c3c);
+}
+
+.ai-notification-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 8px;
+    font-weight: 600;
+    font-size: 1.1rem;
+}
+
+.ai-notification-body {
+    font-size: 0.95rem;
+    line-height: 1.4;
+}
+
+.ai-notification-icon {
+    font-size: 1.5rem;
+}
+</style>
+</head>
+
+<body>
+
+<nav class="navbar">
+  <div class="logo">Authenti<span>Hire</span></div>
+  <div class="nav-links-container">
+    <a href="/" class="nav-btn">Home</a>
+    <a href="/about" class="nav-btn">About</a>
+    <a href="/contact" class="nav-btn">Contact</a>
+    <a href="/profile" class="nav-btn">Profile</a>
+    <a href="/clientportal" class="nav-btn">Logout</a>
+  </div>
+  <div style="display:flex; flex-direction:column; align-items:flex-end; gap:5px;">
+    <button id="darkModeBtn" title="Toggle Dark Mode"><i class="fa-solid fa-moon"></i></button>
+    <button id="inviteBtn"><i class="fa-solid fa-link"></i> Copy Link</button>
+  </div>
+</nav>
+
+<header>
+  <div class="meeting-id">Meeting ID: {{ meeting_id }}</div>
+</header>
+
+<div id="debugStatus">Initializing...</div>
+
+<div id="meetingContainer">
+    <div id="videos">
+        <div class="videoContainer" id="localContainer">
+            <video id="localVideo" autoplay muted playsinline></video>
+            <div class="videoLabel">You</div>
+        </div>
+    </div>
+
+    <div id="sidebar">
+        <div id="tabs">
+            <button class="tabBtn active" data-tab="chatTab">Chat</button>
+            <button class="tabBtn" data-tab="participantsTab">Participants</button>
+        </div>
+        <div class="tabContent active" id="chatTab">
+            <div id="messages" style="flex:1; overflow-y:auto;"></div>
+            <div style="display:flex; margin-top:5px;">
+                <input id="chatInput" placeholder="Type message...">
+                <button id="sendBtn"><i class="fa-solid fa-paper-plane"></i></button>
+            </div>
+        </div>
+        <div class="tabContent" id="participantsTab">
+            <div id="participantsList" style="flex:1; overflow-y:auto;"></div>
+        </div>
+        <div id="controls">
+            <button id="muteBtn"><i class="fa-solid fa-microphone"></i></button>
+            <button id="videoBtn"><i class="fa-solid fa-video"></i></button>
+            <button id="screenBtn"><i class="fa-solid fa-desktop"></i></button>
+            <button id="raiseHandBtn"><i class="fa-solid fa-hand-paper"></i></button>
+            <button id="leaveBtn"><i class="fa-solid fa-right-from-bracket"></i></button>
+        </div>
+    </div>
+</div>
+
+<div id="overlay">
+    Unable to access your camera and/or microphone.<br>Please allow permissions in your browser and refresh.
+</div>
+
+<script>
+const meetingId="{{ meeting_id }}";
+const role="{{ role }}";
+const isHost=role==='host';
+</script>
+
+<script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+<script src="{{ url_for('static', filename='js files/videochat.js') }}"></script>
+<script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@mediapipe/drawing_utils/drawing_utils.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh/face_mesh.js"></script>
+<script>
+    // === MAKE LOCAL VIDEO CONTAINER DRAGGABLE ===
+const localContainer = document.getElementById("localContainer");
+let isDragging = false;
+let offsetX, offsetY;
+
+localContainer.addEventListener("mousedown", (e) => {
+    isDragging = true;
+    offsetX = e.clientX - localContainer.offsetLeft;
+    offsetY = e.clientY - localContainer.offsetTop;
+    localContainer.style.transition = "none"; // Disable smooth transition while dragging
+});
+
+document.addEventListener("mousemove", (e) => {
+    if (isDragging) {
+        const x = e.clientX - offsetX;
+        const y = e.clientY - offsetY;
+
+        // Optional: prevent dragging out of window
+        const maxX = window.innerWidth - localContainer.offsetWidth;
+        const maxY = window.innerHeight - localContainer.offsetHeight;
+        const clampedX = Math.max(0, Math.min(x, maxX));
+        const clampedY = Math.max(0, Math.min(y, maxY));
+
+        localContainer.style.left = clampedX + "px";
+        localContainer.style.top = clampedY + "px";
+        localContainer.style.position = "fixed";
+    }
+});
+
+document.addEventListener("mouseup", () => {
+    isDragging = false;
+    localContainer.style.transition = "all 0.2s ease"; // Add smooth movement back
+});
+
+console.log('🚀 Main script loaded');
+
+// Debug status updater
+function updateDebugStatus(msg) {
+    const debug = document.getElementById('debugStatus');
+    if (debug) debug.textContent = msg;
+    console.log('📊', msg);
+}
+
+window.showCameraError = () => { 
+    document.getElementById('overlay').style.display='flex'; 
+};
+
+// Tabs
+document.querySelectorAll('.tabBtn').forEach(btn=>{
+    btn.onclick = () => {
+        document.querySelectorAll('.tabBtn').forEach(b=>b.classList.remove('active'));
+        document.querySelectorAll('.tabContent').forEach(c=>c.classList.remove('active'));
+        btn.classList.add('active');
+        document.getElementById(btn.dataset.tab).classList.add('active');
+    }
+});
+
+// Copy Link
+document.getElementById('inviteBtn').onclick = () => {
+    navigator.clipboard.writeText(window.location.href);
+    alert('Meeting link copied!');
+};
+
+// ===== NEW: AI Detection Pop-up Function =====
+function showAINotification(feature, status, source) {
+    console.log(`🔔 Showing notification: ${feature} = ${status}`);
+    
+    // Create notification element
+    const notification = document.createElement('div');
+    notification.className = 'ai-notification';
+    
+    // Determine notification type and icon
+    let notifType = 'success';
+    let icon = '✅';
+    
+    if (status.includes('⚠️') || status.includes('Possible')) {
+        notifType = 'warning';
+        icon = '⚠️';
+    } else if (status.includes('❌') || status.includes('Error') || status.includes('not match')) {
+        notifType = 'error';
+        icon = '❌';
+    } else if (status.includes('✅')) {
+        notifType = 'success';
+        icon = '✅';
+    }
+    
+    notification.classList.add(notifType);
+    
+    // Format feature name
+    const featureNames = {
+        'deepfake': 'Deepfake Detection',
+        'liveness': 'Liveness Check',
+        'multiperson': 'Multi-Person Detection',
+        'gaze': 'Gaze Tracking',
+        'bias': 'Bias Detection',
+        'audio_clarity': 'Audio Clarity',
+        'face_match': 'Face Matching'
+    };
+    
+    const displayName = featureNames[feature] || feature;
+    
+    // Set content
+    notification.innerHTML = `
+        <div class="ai-notification-header">
+            <span class="ai-notification-icon">${icon}</span>
+            <span>${displayName}</span>
+        </div>
+        <div class="ai-notification-body">
+            ${status}
+            ${source ? `<br><small>Source: ${source}</small>` : ''}
+        </div>
+    `;
+    
+    // Add to page
+    document.body.appendChild(notification);
+    
+    // Auto-remove after 5 seconds
+    setTimeout(() => {
+        notification.remove();
+    }, 5000);
+}
+
+// Start interview detection
+fetch(`/start_interview/${meetingId}`, {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'}
+})
+.then(r => r.json())
+.then(data => {
+    console.log('✅ Interview started:', data);
+    updateDebugStatus('AI Detection Started');
+})
+.catch(err => console.error('❌ Failed to start interview:', err));
+
+// ===== NEW: Listen for AI updates and show pop-ups =====
+if (typeof socket !== 'undefined') {
+    socket.on('ai_status_update', (data) => {
+        console.log('🔔 AI Update received:', data);
+        updateDebugStatus(`AI: ${data.feature} - ${data.status}`);
+        
+        // Show pop-up notification
+        showAINotification(data.feature, data.status, data.source);
+    });
+}
+
+// ===== FRAME CAPTURE - STANDALONE =====
+setTimeout(function() {
+    console.log('🎥 Starting frame capture initialization...');
+    updateDebugStatus('Initializing frame capture...');
+    
+    const localVideo = document.getElementById('localVideo');
+    if (!localVideo) {
+        console.error('❌ localVideo element not found!');
+        updateDebugStatus('ERROR: Video element not found');
+        return;
+    }
+    
+    let frameCount = 0;
+    let captureStarted = false;
+    
+    function tryStartCapture() {
+        console.log('Checking video readiness...');
+        console.log('- readyState:', localVideo.readyState);
+        console.log('- videoWidth:', localVideo.videoWidth);
+        console.log('- videoHeight:', localVideo.videoHeight);
+        
+        if (localVideo.videoWidth > 0 && localVideo.videoHeight > 0 && !captureStarted) {
+            console.log('✅ Video is ready! Starting frame capture...');
+            updateDebugStatus('Frame capture active');
+            captureStarted = true;
+            
+            setInterval(function() {
+                try {
+                    const canvas = document.createElement('canvas');
+                    canvas.width = 640;
+                    canvas.height = 480;
+                    
+                    const ctx = canvas.getContext('2d');
+                    ctx.drawImage(localVideo, 0, 0, canvas.width, canvas.height);
+                    
+                    const frame_base64 = canvas.toDataURL('image/jpeg', 0.8);
+                    
+                    if (typeof socket !== 'undefined') {
+                        socket.emit('candidate_frame', { frame_base64: frame_base64 });
+                        
+                        frameCount++;
+                        if (frameCount % 20 === 0) {
+                            console.log(`📸 Sent ${frameCount} frames`);
+                            updateDebugStatus(`Frames sent: ${frameCount}`);
+                        }
+                    } else {
+                        console.error('❌ Socket not available');
+                        updateDebugStatus('ERROR: Socket unavailable');
+                    }
+                } catch(err) {
+                    console.error('Frame capture error:', err);
+                }
+            }, 500);
+        } else {
+            console.log('⏳ Video not ready yet, retrying in 500ms...');
+            updateDebugStatus('Waiting for video...');
+            setTimeout(tryStartCapture, 500);
+        }
+    }
+    
+    // Try to start capture
+    tryStartCapture();
+    
+}, 3000); // Wait 3 seconds for video to initialize 
+// ===== AUDIO CAPTURE ===== 👈 ADD HERE
+setTimeout(function() {
+    console.log('🎤 Starting audio capture...');
+    
+    let audioContext;
+    let mediaRecorder;
+    let audioChunks = [];
+    
+    navigator.mediaDevices.getUserMedia({ audio: true })
+        .then(stream => {
+            console.log('✅ Audio stream obtained');
+            
+            mediaRecorder = new MediaRecorder(stream);
+            
+            mediaRecorder.ondataavailable = (event) => {
+                if (event.data.size > 0) {
+                    audioChunks.push(event.data);
+                }
+            };
+            
+            mediaRecorder.onstop = () => {
+                const audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
+                audioChunks = [];
+                
+                // Send to backend
+                const formData = new FormData();
+                formData.append('audio', audioBlob, 'audio.wav');
+                formData.append('meeting_id', meetingId);
+                
+                fetch('/analyze_audio', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(r => r.json())
+                .then(data => {
+                    console.log('🎤 Audio analysis result:', data);
+                    updateDebugStatus('Audio analyzed');
+                })
+                .catch(err => console.error('Audio analysis error:', err));
+            };
+            
+            // Record 5 seconds of audio every 10 seconds
+            setInterval(() => {
+                if (mediaRecorder.state === 'inactive') {
+                    mediaRecorder.start();
+                    console.log('🎤 Recording audio...');
+                    
+                    setTimeout(() => {
+                        if (mediaRecorder.state === 'recording') {
+                            mediaRecorder.stop();
+                            console.log('🎤 Audio sent for analysis');
+                        }
+                    }, 5000);
+                }
+            }, 10000);
+        })
+        .catch(err => {
+            console.error('❌ Audio access denied:', err);
+            updateDebugStatus('Audio access denied');
+        });
+}, 4000);
+
+</script>
+</body>
+</html>
